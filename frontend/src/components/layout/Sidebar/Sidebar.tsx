@@ -25,6 +25,7 @@ export const Sidebar: FC<SidebarProps> = (props) => {
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up("lg"));
   const sections = useSections();
   const location = useLocation();
+
   const previousPathnameRef = useRef(location.pathname);
 
   useEffect(() => {
