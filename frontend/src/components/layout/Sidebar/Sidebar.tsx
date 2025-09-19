@@ -107,7 +107,7 @@ export const Sidebar: FC<SidebarProps> = (props) => {
                 variant="contained"
                 className={"pop-animation"}
               >
-                {"Scrivi su Whatsapp"}
+                {"Prenota una consulenza"}
               </Button>
             </Link>
           </Box>
