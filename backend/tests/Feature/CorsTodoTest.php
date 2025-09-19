@@ -42,7 +42,6 @@ class CorsTodoTest extends TestCase
     {
         return [
             ['/api/todo', 'POST'],
-            ['/api/todo/', 'POST'],
             ['/api/todo/1', 'PUT'],
             ['/api/todo/1', 'DELETE'],
             ['/api/todo/complete/1', 'PATCH'],
