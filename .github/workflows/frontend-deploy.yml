@@ -9,6 +9,9 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      REACT_APP_API_SERVER_URL: ${{ secrets.REACT_APP_API_SERVER_URL }}
+      REACT_APP_WEBSOCKET_SERVER_URL: ${{ secrets.REACT_APP_WEBSOCKET_SERVER_URL }}
 
     defaults:
       run:
