@@ -39,6 +39,11 @@ jobs:
           python - <<'PY'
           import os
 
+          def quote_env_value(value: str) -> str:
+              """Quote and escape environment values for dotenv compatibility."""
+              escaped = str(value).replace("\\", "\\\\").replace('"', '\\"')
+              return f'"{escaped}"'
+
           path = "backend/.env"
           replacements = {
               "APP_DEBUG": "false",
@@ -65,7 +70,7 @@ jobs:
 
                   key, value = line.split("=", 1)
                   if key in replacements:
-                      replacement_value = replacements[key]
+                      replacement_value = quote_env_value(replacements[key])
                       f.write(f"{key}={replacement_value}\n")
                   else:
                       f.write(original_line)
