@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import type { Theme } from "@mui/material";
 import {
@@ -12,7 +13,7 @@ import {
 import { Scrollbar } from "components/core/Scrollbar";
 import { SidebarSection } from "./SidebarSection";
 import { Section, useSections } from "hooks/dashboard/useSections";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 interface SidebarProps {
   onClose?: () => void;
@@ -23,6 +24,18 @@ export const Sidebar: FC<SidebarProps> = (props) => {
   const { onClose, open } = props;
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up("lg"));
   const sections = useSections();
+  const location = useLocation();
+  const previousPathnameRef = useRef(location.pathname);
+
+  useEffect(() => {
+    if (previousPathnameRef.current !== location.pathname) {
+      previousPathnameRef.current = location.pathname;
+
+      if (!lgUp && open) {
+        onClose?.();
+      }
+    }
+  }, [lgUp, location.pathname, onClose, open]);
 
   const content = (
     <>
