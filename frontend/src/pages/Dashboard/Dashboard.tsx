@@ -2,6 +2,7 @@ import { Box, Card, Grid, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import React from "react";
 import { OverallResults } from "components/dashboard/OverallResults";
+import { Splashscreen } from "components/core/Splashscreen";
 import TomorrowSchedule from "../../components/dashboard/TomorrowSchedule/TomorrowSchedule";
 import TodaySchedule from "../../components/dashboard/TodaySchedule/TodaySchedule";
 import { useUser } from "hooks/user";
@@ -51,6 +52,10 @@ export const Dashboard = (): React.ReactElement => {
   const user = useUser();
 
   console.log(user);
+
+  if (user === undefined) {
+    return <Splashscreen />;
+  }
 
   return (
     <Box
