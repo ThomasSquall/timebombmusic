@@ -1,0 +1,14 @@
+.pop-animation {
+    color: white!important;
+    animation-name: pop-animation;
+    animation-duration: 2s;
+    animation-iteration-count: 100;
+    background-color: #ff00fc!important;
+}
+
+@keyframes pop-animation {
+    50% {
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+    }
+}

@@ -1,0 +1,54 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# OS / IDE
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Root env (if any)
+.env
+.env.local
+
+# Frontend (React/Node)
+/frontend/node_modules
+/frontend/.pnp
+/frontend/.pnp.*
+
+# Yarn Berry: keep only required subfolders tracked if used
+/frontend/.yarn/*
+!/frontend/.yarn/patches
+!/frontend/.yarn/plugins
+!/frontend/.yarn/releases
+!/frontend/.yarn/sdks
+!/frontend/.yarn/versions
+
+# Frontend testing & builds
+/frontend/coverage
+/frontend/build
+
+# Frontend env files
+/frontend/.env.local
+/frontend/.env.development.local
+/frontend/.env.test.local
+/frontend/.env.production.local
+
+# Frontend logs
+/frontend/npm-debug.log*
+/frontend/yarn-debug.log*
+/frontend/yarn-error.log*
+
+# Backend (Laravel)
+/backend/vendor
+/backend/node_modules
+/backend/public/hot
+/backend/public/storage
+/backend/storage/*.key
+/backend/storage/logs/
+/backend/bootstrap/cache/
+/backend/.env
+/backend/.phpunit.result.cache
+/backend/Homestead.json
+/backend/Homestead.yaml
+/backend/npm-debug.log
+/backend/yarn-error.log
