@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import type { Theme } from "@mui/material";
 import {
@@ -26,9 +26,15 @@ export const Sidebar: FC<SidebarProps> = (props) => {
   const sections = useSections();
   const location = useLocation();
 
+  const previousPathnameRef = useRef(location.pathname);
+
   useEffect(() => {
-    if (!lgUp && open) {
-      onClose?.();
+    if (previousPathnameRef.current !== location.pathname) {
+      previousPathnameRef.current = location.pathname;
+
+      if (!lgUp && open) {
+        onClose?.();
+      }
     }
   }, [lgUp, location.pathname, onClose, open]);
 
