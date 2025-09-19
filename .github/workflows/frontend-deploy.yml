@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - master
+    paths:
+      - frontend/**
+      - .github/workflows/frontend-deploy.yml
   workflow_dispatch:
 
 jobs:
