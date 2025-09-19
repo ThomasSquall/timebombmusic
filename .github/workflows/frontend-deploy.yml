@@ -31,6 +31,18 @@ jobs:
       - name: Build frontend
         run: npm run build
 
+      - name: Add .htaccess to build output
+        run: |
+          cat <<'EOF' > build/.htaccess
+          RewriteEngine On
+          RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+          RewriteBase /
+          RewriteRule ^index\.html$ - [L]
+          RewriteCond %{REQUEST_FILENAME} !-f
+          RewriteCond %{REQUEST_FILENAME} !-d
+          RewriteRule . /index.html [L]
+          EOF
+
       - name: Upload build to Cloudways via SFTP
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
