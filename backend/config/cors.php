@@ -19,7 +19,46 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [env('CLIENT_ORIGIN_URL')],
+    'allowed_origins' => (static function () {
+        $rawOrigins = env('CLIENT_ORIGIN_URLS');
+
+        if (empty($rawOrigins)) {
+            $rawOrigins = env('CLIENT_ORIGIN_URL', '');
+        }
+
+        if (!is_string($rawOrigins)) {
+            $rawOrigins = '';
+        }
+
+        $candidates = preg_split('/[\s,]+/', $rawOrigins, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+
+        $origins = [];
+
+        foreach ($candidates as $candidate) {
+            $candidate = trim($candidate);
+
+            if ($candidate === '') {
+                continue;
+            }
+
+            if ($candidate !== '*') {
+                $candidate = rtrim($candidate, '/');
+            }
+
+            $origins[] = $candidate;
+        }
+
+        $origins = array_values(array_unique($origins));
+
+        if (empty($origins)) {
+            $origins = [
+                'http://localhost:3000',
+                'https://app.timebombmusic.it',
+            ];
+        }
+
+        return $origins;
+    })(),
 
     'allowed_origins_patterns' => [],
 
