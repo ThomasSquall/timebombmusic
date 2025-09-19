@@ -3,7 +3,6 @@ import { User } from "../../../types/User";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import {
-  Box,
   Button,
   Card,
   CardActions,

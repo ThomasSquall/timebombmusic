@@ -48,7 +48,7 @@ export const getTodosDaysCount = async ({
     },
   };
 
-  const { data, error } = await callExternalApi({ config });
+  const { data } = await callExternalApi({ config });
 
   return data as number;
 };

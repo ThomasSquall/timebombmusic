@@ -89,15 +89,11 @@ export const Users = (): React.ReactElement => {
     } catch (err) {
       console.error(err);
     }
-  }, []);
+  }, [getAccessTokenSilently]);
 
-  useEffect(
-    () => {
-      void getUsers();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  useEffect(() => {
+    void getUsers();
+  }, [getUsers]);
 
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => {

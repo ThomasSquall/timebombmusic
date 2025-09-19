@@ -25,7 +25,7 @@ export const ChatMessage: FC<ChatMessageProps> = (props) => {
     authorType,
     ...other
   } = props;
-  const [expandMedia, setExpandMedia] = useState<boolean>(false);
+  const [, setExpandMedia] = useState<boolean>(false);
 
   return (
     <Box

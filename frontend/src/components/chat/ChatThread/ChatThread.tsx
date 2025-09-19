@@ -1,8 +1,8 @@
 import type { FC } from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { Box, Divider } from "@mui/material";
-import type { Message, Participant, Thread } from "types/Chat";
+import type { Message } from "types/Chat";
 import { Scrollbar } from "components/core/Scrollbar";
 import { ChatMessageAdd } from "components/chat/ChatMessageAdd";
 import { ChatMessages } from "components/chat/ChatMessages";
@@ -10,7 +10,6 @@ import { ChatThreadToolbar } from "components/chat/ChatThreadToolbar";
 import { use } from "hooks/use";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "contexts/jwt-provider";
-import { useUser } from "../../../hooks/user/useUser";
 import { useWebsockets } from "../../../hooks/websockets";
 import { sendMessage } from "../../../services/chat.service";
 
@@ -23,9 +22,6 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
   const navigate = useNavigate();
   const { thread, participants, addMessageToThread } = use.useChat;
   const messagesRef = useRef<any>(null);
-
-  // To get the user from the authContext, you can use
-  const user = useUser();
   const { getAccessTokenSilently } = useAuth();
 
   const getDetails = async (): Promise<void> => {

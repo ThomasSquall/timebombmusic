@@ -5,7 +5,6 @@ import { AppBar, Box, IconButton, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Menu as MenuIcon } from "icons/menu";
 import { AccountButton } from "./AccountButton";
-import { Link } from "react-router-dom";
 
 interface NavbarProps extends AppBarProps {
   onOpenSidebar?: () => void;

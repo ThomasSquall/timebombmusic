@@ -4,7 +4,6 @@ import { User } from "types/User";
 import {
   Box,
   Card,
-  CardHeader,
   Divider,
   IconButton,
   Table,
@@ -15,13 +14,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowRight as ArrowRightIcon } from "icons/arrow-right";
-import {
-  Scrollbar,
-  MoreMenu,
-  SeverityPill,
-  MoreMenuAction,
-} from "components/core";
+import { Scrollbar, SeverityPill } from "components/core";
 import { Plus as PlusIcon } from "icons/plus";
 import { Pencil } from "../../../icons/pencil";
 
@@ -38,16 +31,6 @@ export const UserTodos: FC<UserTodosProps> = (props) => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const paginatedTodos = todos.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-
-  const actions: MoreMenuAction[] = [
-    {
-      label: "Aggiungi nuovo",
-      Icon: <PlusIcon fontSize={"small"} sx={{ color: "black" }} />,
-      onClick: () => {
-        void navigate("/users/" + user.id + "/todos/new");
-      },
-    },
-  ];
 
   return (
     <Card {...props} sx={{ backgroundColor: "white" }}>

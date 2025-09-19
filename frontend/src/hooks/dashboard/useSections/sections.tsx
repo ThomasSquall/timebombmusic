@@ -1,8 +1,5 @@
 import { ReactNode } from "react";
 import { Home as HomeIcon } from "icons/home";
-import { Camera } from "icons/camera";
-import { ChartPie as ChartPieIcon } from "icons/chart-pie";
-import { ChatAlt2 as ChatAlt2Icon } from "icons/chat-alt2";
 import { Users as UsersIcon } from "icons/users";
 import { CalendarMonth } from "@mui/icons-material";
 

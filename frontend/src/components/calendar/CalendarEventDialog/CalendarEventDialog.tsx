@@ -121,15 +121,6 @@ export const CalendarEventDialog: FC<CalendarEventFormProps> = (props) => {
     }),
     onSubmit: async (values, helpers): Promise<void> => {
       try {
-        const data = {
-          allDay: values.allDay,
-          description: values.description,
-          end: values.end.getTime(),
-          start: values.start.getTime(),
-          title: values.title,
-          completed: values.completed,
-        };
-
         if (event && event.id) {
           await updateTodo({
             accessToken: await getAccessTokenSilently(),
@@ -178,15 +169,6 @@ export const CalendarEventDialog: FC<CalendarEventFormProps> = (props) => {
       formik.setFieldValue("end", date);
     }
      */
-  };
-
-  const handleEndDateChange = (date: Date | null): void => {
-    formik.setFieldValue("end", date);
-
-    // Prevent start date to be after end date
-    if (formik.values.start && date && date < formik.values.start) {
-      formik.setFieldValue("start", date);
-    }
   };
 
   const handleDelete = async (): Promise<void> => {

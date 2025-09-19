@@ -87,9 +87,7 @@ export const NewTodo = (): React.ReactElement => {
 
   // Fetch user when `todo` or `id` changes
   useEffect(() => {
-    if (todo || id) {
-      void getUser();
-    }
+    void getUser();
   }, [getUser]);
 
   if (!user) {

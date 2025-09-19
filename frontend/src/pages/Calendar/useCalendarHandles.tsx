@@ -181,8 +181,6 @@ export const useCalendarHandles = (): useCalendarHandlesReturn => {
 
   const handleEventResize = useCallback(
     async (arg: EventResizeDoneArg): Promise<void> => {
-      const { event } = arg;
-
       /*
       try {
         dispatch(
