@@ -54,7 +54,7 @@ export const getTodos = async ({
   accessToken,
 }: GetTodosParams): Promise<ApiResponse> => {
   const config: AxiosRequestConfig = {
-    url: `${apiServerUrl}/todo/`,
+    url: `${apiServerUrl}/todo`,
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -128,7 +128,7 @@ export const createTodo = async ({
   user_id,
 }: CreateTodosParams): Promise<ApiResponse> => {
   const config: AxiosRequestConfig = {
-    url: `${apiServerUrl}/todo/`,
+    url: `${apiServerUrl}/todo`,
     method: "POST",
     data: {
       name,
