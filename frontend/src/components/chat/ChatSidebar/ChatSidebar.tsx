@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import type { Theme } from "@mui/material";
 import {
   Box,
-  Button,
   Drawer,
   IconButton,
   List,
@@ -12,16 +11,14 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { Plus as PlusIcon } from "../../../icons/plus";
 import { X as XIcon } from "../../../icons/x";
-import type { Contact, Participant, Thread } from "types/Chat";
+import type { Contact, Thread } from "types/Chat";
 import { Scrollbar } from "components/core/Scrollbar";
 import { ChatContactSearch } from "components/chat/ChatContactSearch";
 import { ChatThreadItem } from "components/chat/ChatThread";
 import { use } from "hooks/use";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "contexts/jwt-provider";
-import { useUser } from "../../../hooks/user";
 import { getThreadByUser } from "../../../services/chat.service";
 
 interface ChatSidebarProps {
@@ -60,14 +57,6 @@ export const ChatSidebar: FC<ChatSidebarProps> = (props) => {
   const navigate = useNavigate();
   const { searchContacts } = use.useChat;
   const { getAccessTokenSilently } = useAuth();
-  const user = useUser();
-
-  const handleGroupClick = (): void => {
-    if (!mdUp) {
-      onClose?.();
-    }
-  };
-
   const handleSearchClickAway = (): void => {
     setIsSearchFocused(false);
     setSearchQuery("");
@@ -134,18 +123,6 @@ export const ChatSidebar: FC<ChatSidebarProps> = (props) => {
       >
         <Typography variant="h5">Chat</Typography>
         <Box sx={{ flexGrow: 1 }} />
-        {/*
-        <Link to="/chat?compose=true">
-          <Button
-            component="h2"
-            onClick={handleGroupClick}
-            startIcon={<PlusIcon />}
-            variant="contained"
-          >
-            Group
-          </Button>
-        </Link>
-        */}
         <IconButton
           onClick={onClose}
           sx={{

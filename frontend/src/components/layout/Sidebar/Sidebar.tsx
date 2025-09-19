@@ -9,7 +9,6 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { Logo } from "components/core/Logo";
 import { Scrollbar } from "components/core/Scrollbar";
 import { SidebarSection } from "./SidebarSection";
 import { Section, useSections } from "hooks/dashboard/useSections";

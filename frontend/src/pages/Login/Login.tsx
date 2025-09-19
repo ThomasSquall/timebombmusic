@@ -8,7 +8,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import logoUrl from "assets/images/logo-login.png";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/jwt-provider";
 import { useMounted } from "../../hooks/utils";

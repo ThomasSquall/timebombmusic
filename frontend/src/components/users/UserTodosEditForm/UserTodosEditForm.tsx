@@ -114,10 +114,10 @@ export const UserTodosEditForm: FC<UserTodosEditFormProps> = (props) => {
             width: 64,
           }}
         >
-          {getInitials(user.name == "" ? user.email : user.name)}
+          {getInitials(user.name === "" ? user.email : user.name)}
         </Avatar>
         <Typography variant="h4">
-          {user.name == "" ? user.email : user.name}
+          {user.name === "" ? user.email : user.name}
         </Typography>
       </Grid>
 

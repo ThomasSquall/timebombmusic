@@ -1,14 +1,5 @@
 import React, { FC } from "react";
-import {
-  Box,
-  Card,
-  CardActions,
-  CardHeader,
-  Divider,
-  IconButton,
-  Theme,
-  useMediaQuery,
-} from "@mui/material";
+import { Box, Card, Divider, IconButton, Theme, useMediaQuery } from "@mui/material";
 import PropertyList, { PropertyListItem } from "components/core/PropertyList";
 import { PencilAlt as PencilAltIcon } from "icons/pencil-alt";
 import { Link } from "react-router-dom";
@@ -27,7 +18,7 @@ export const UserBasicDetails: FC<UserBasicDetailsProps> = (props) => {
   const align = mdUp ? "horizontal" : "vertical";
 
   return (
-    <Card {...props} sx={{ backgroundColor: "white" }}>
+    <Card {...other} sx={{ backgroundColor: "white" }}>
       <Box
         sx={{
           display: "flex",

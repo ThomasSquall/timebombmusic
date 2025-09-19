@@ -1,26 +1,7 @@
 import type { FC } from "react";
-import { useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { formatDistanceToNowStrict } from "date-fns";
-import {
-  Avatar,
-  AvatarGroup,
-  Box,
-  IconButton,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import { Archive as ArchiveIcon } from "../../../icons/archive";
-import { Bell as BellIcon } from "../../../icons/bell";
-import { Ban as BanIcon } from "../../../icons/ban";
-import { Camera as CameraIcon } from "../../../icons/camera";
-import { Phone as PhoneIcon } from "../../../icons/phone";
-import { DotsHorizontal as DotsHorizontalIcon } from "../../../icons/dots-horizontal";
-import { Trash as TrashIcon } from "../../../icons/trash";
+import { Avatar, AvatarGroup, Box, Typography } from "@mui/material";
 import type { Participant } from "types/Chat";
 import { useUser } from "../../../hooks/user";
 
@@ -30,10 +11,6 @@ interface ChatThreadToolbarProps {
 
 export const ChatThreadToolbar: FC<ChatThreadToolbarProps> = (props) => {
   const { participants, ...other } = props;
-  const moreRef = useRef<HTMLButtonElement | null>(null);
-  const [openMenu, setOpenMenu] = useState<boolean>(false);
-  // To get the user from the authContext, you can use
-  // `const { user } = useAuth();`
   const user = useUser();
 
   const recipients = participants.filter(
@@ -48,14 +25,6 @@ export const ChatThreadToolbar: FC<ChatThreadToolbarProps> = (props) => {
       []
     )
     .join(", ");
-
-  const handleMenuOpen = (): void => {
-    setOpenMenu(true);
-  };
-
-  const handleMenuClose = (): void => {
-    setOpenMenu(false);
-  };
 
   return (
     <Box
@@ -110,50 +79,6 @@ export const ChatThreadToolbar: FC<ChatThreadToolbarProps> = (props) => {
         </Box>
       </Box>
       <Box sx={{ flexGrow: 1 }} />
-      {/*
-      <IconButton>
-        <PhoneIcon fontSize="small" />
-      </IconButton>
-      <IconButton>
-        <CameraIcon fontSize="small" />
-      </IconButton>
-      <Tooltip title="More options">
-        <IconButton onClick={handleMenuOpen} ref={moreRef}>
-          <DotsHorizontalIcon fontSize="small" />
-        </IconButton>
-      </Tooltip>
-      <Menu
-        anchorEl={moreRef.current}
-        keepMounted
-        onClose={handleMenuClose}
-        open={openMenu}
-      >
-        <MenuItem>
-          <ListItemIcon>
-            <BanIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Block contact" />
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <TrashIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Delete thread" />
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <ArchiveIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Archive thread" />
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <BellIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Mute notifications" />
-        </MenuItem>
-      </Menu>
-      */}
     </Box>
   );
 };

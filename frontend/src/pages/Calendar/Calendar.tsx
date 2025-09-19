@@ -20,7 +20,6 @@ import { FullCalendarWrapper } from "./index.style";
 import { gtm } from "lib/gtm";
 import { useCalendar } from "hooks/calendar";
 import { useUser } from "hooks/user";
-import { Todo } from "types/Todo";
 import { getUser } from "services/user.service";
 import { User } from "types/User";
 import { getInitials } from "utils/get-initials";
@@ -98,7 +97,6 @@ export const Calendar = () => {
     handleDateNext,
     handleAddClick,
     handleNewEvent,
-    handleRangeSelect,
     handleEventSelect,
     handleEventResize,
     handleEventDrop,

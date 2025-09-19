@@ -3,19 +3,10 @@ import { User } from "../../types/User";
 import { useAuth } from "contexts/jwt-provider";
 import { getUser } from "../../services/user.service";
 import { useParams } from "react-router";
-import {
-  Avatar,
-  Box,
-  Button,
-  Chip,
-  Grid,
-  Link as MUILink,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, Grid, Link as MUILink, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import { Link } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { PencilAlt as PencilAltIcon } from "icons/pencil-alt";
 import { getInitials } from "utils/get-initials";
 import { UserBasicDetails } from "components/users";
 import { UserTodos } from "../../components/users/UserTodos";
@@ -39,11 +30,11 @@ export const UserInfo = (): React.ReactElement => {
     } catch (err) {
       console.error(err);
     }
-  }, [id]);
+  }, [getAccessTokenSilently, id]);
 
   useEffect(() => {
     void getEditUser();
-  }, []);
+  }, [getEditUser]);
 
   if (!user) {
     return <></>;
@@ -91,11 +82,11 @@ export const UserInfo = (): React.ReactElement => {
                   width: 64,
                 }}
               >
-                {getInitials(user.name == "" ? user.email : user.name)}
+                {getInitials(user.name === "" ? user.email : user.name)}
               </Avatar>
               <div>
                 <Typography variant="h4">
-                  {user.name == "" ? user.email : user.name}
+                  {user.name === "" ? user.email : user.name}
                 </Typography>
                 {/* <Box
                   sx={{

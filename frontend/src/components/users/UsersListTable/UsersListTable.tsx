@@ -59,19 +59,6 @@ export const UsersListTable: FC<UserListTableProps> = (props) => {
     setSelectedUsers(event.target.checked ? users.map((user) => user.id) : []);
   };
 
-  const handleSelectOneUser = (
-    event: ChangeEvent<HTMLInputElement>,
-    userId: number
-  ): void => {
-    if (!selectedUsers.includes(userId)) {
-      setSelectedUsers((prevSelected) => [...prevSelected, userId]);
-    } else {
-      setSelectedUsers((prevSelected) =>
-        prevSelected.filter((id) => id !== userId)
-      );
-    }
-  };
-
   const enableBulkActions = selectedUsers.length > 0;
   const selectedSomeUsers =
     selectedUsers.length > 0 && selectedUsers.length < users.length;
@@ -144,7 +131,7 @@ export const UsersListTable: FC<UserListTableProps> = (props) => {
                           width: 42,
                         }}
                       >
-                        {getInitials(user.name == "" ? user.email : user.name)}
+                        {getInitials(user.name === "" ? user.email : user.name)}
                       </Avatar>
                       <Box sx={{ ml: 1 }}>
                         <Link to={"/users/" + user.id}>{user.name}</Link>

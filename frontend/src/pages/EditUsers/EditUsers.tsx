@@ -4,7 +4,7 @@ import { User } from "../../types/User";
 import { getUser } from "../../services/user.service";
 import { useAuth } from "contexts/jwt-provider";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Box, Typography, Link as MUILink, Avatar, Chip } from "@mui/material";
+import { Box, Typography, Link as MUILink, Avatar } from "@mui/material";
 import { Container } from "@mui/system";
 import { Link } from "react-router-dom";
 import { getInitials } from "../../utils/get-initials";
@@ -53,11 +53,11 @@ export const EditUsers = (): React.ReactElement => {
     } catch (err) {
       console.error(err);
     }
-  }, [id]);
+  }, [getAccessTokenSilently, id]);
 
   useEffect(() => {
     void getEditUser();
-  }, []);
+  }, [getEditUser]);
 
   if (!user) {
     return <></>;
@@ -112,12 +112,12 @@ export const EditUsers = (): React.ReactElement => {
                 cursor: "pointer",
               }}
             >
-              {getInitials(user.name == "" ? user.email : user.name)}
+              {getInitials(user.name === "" ? user.email : user.name)}
             </Avatar>
           </label>
           <div>
             <Typography noWrap variant="h4">
-              {user.name == "" ? user.email : user.name}
+              {user.name === "" ? user.email : user.name}
             </Typography>
             {/* <Box
               sx={{
