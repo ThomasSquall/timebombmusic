@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import { getCurrentUser, impersonateUser, stopImpersonation } from "../services/user.service";
 import { CurrentUser, ImpersonatorInfo } from "types/User";
+import { normalizeCurrentUser } from "utils/normalize-current-user";
 
 // Login function
 const login = async (email: string, password: string) => {
@@ -65,6 +66,7 @@ interface AuthUser {
   email: string;
   is_admin: boolean;
   impersonator: ImpersonatorInfo | null;
+  isImpersonating: boolean;
 }
 
 interface JWTContextType {
@@ -118,14 +120,17 @@ export const JWTProvider: React.FC<JWTProviderProps> = ({ children }) => {
 
         const currentUser = response.data as CurrentUser;
 
+        const normalizedUser = normalizeCurrentUser(currentUser);
+
         setUser({
           token,
-          id: currentUser.id,
-          avatar: currentUser.avatar,
-          name: currentUser.name,
-          email: currentUser.email,
-          is_admin: currentUser.is_admin,
-          impersonator: currentUser.impersonator ?? null,
+          id: normalizedUser.id,
+          avatar: normalizedUser.avatar,
+          name: normalizedUser.name,
+          email: normalizedUser.email,
+          is_admin: normalizedUser.is_admin,
+          impersonator: normalizedUser.impersonator ?? null,
+          isImpersonating: normalizedUser.isImpersonating ?? false,
         });
       })
       .catch(() => {
