@@ -7,7 +7,9 @@ import {
   Typography,
   CardContent,
   Box,
+  useMediaQuery,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import Chart from "react-apexcharts";
 import useChart, { UseChartType } from "./useChart";
 import { useAnalytics } from "hooks/dashboard/useAnalytics";
@@ -34,6 +36,8 @@ const LegendRow = ({ legend, color }: { legend: string; color: string }) => {
 export const OverallResults: FC = (props) => {
   const chart: UseChartType = useChart();
   const result = useAnalytics();
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
     <Card {...props} sx={{ backgroundColor: "white" }}>
@@ -44,19 +48,17 @@ export const OverallResults: FC = (props) => {
 
         <Divider sx={{ my: 2 }} />
 
-        <Grid
-          container
-          justifyContent={"space-between"}
-          spacing={3}
-          alignItems={"center"}
-        >
-          <Grid item xs={4}>
-            <Chart
-              height={200}
-              options={chart.chartOptions}
-              series={chart.chartSeries}
-              type={"radialBar"}
-            />
+        <Grid container spacing={3} alignItems={"center"}>
+          <Grid item xs={12} sm={5} md={4}>
+            <Box sx={{ mx: "auto", width: "100%", maxWidth: 280 }}>
+              <Chart
+                height={isSmallScreen ? 220 : 200}
+                width="100%"
+                options={chart.chartOptions}
+                series={chart.chartSeries}
+                type={"radialBar"}
+              />
+            </Box>
           </Grid>
 
           {/* {!result && (
@@ -66,7 +68,13 @@ export const OverallResults: FC = (props) => {
           )} */}
 
           {Object.keys(result).length && (
-            <Grid item xs={8}>
+            <Grid
+              item
+              xs={12}
+              sm={7}
+              md={8}
+              sx={{ textAlign: { xs: "center", sm: "left" } }}
+            >
               <Typography color="textSecondary" variant="overline">
                 {"Giorni totali"}
               </Typography>
