@@ -27,6 +27,15 @@ type ChangePasswordParams = {
   confirmNewPassword: string;
 };
 
+type ImpersonateUserParams = {
+  accessToken: string;
+  userId: number;
+};
+
+type StopImpersonationParams = {
+  accessToken: string;
+};
+
 export const getCurrentUser = async ({
   accessToken,
 }: GetCurrentUserParams): Promise<ApiResponse> => {
@@ -160,6 +169,47 @@ export const changePassword = async ({
       current_password: currentPassword,
       new_password: newPassword,
       new_password_confirmation: confirmNewPassword, // This should match the 'confirmed' validation rule in Laravel
+    },
+  };
+
+  const { data, error } = await callExternalApi({ config });
+
+  return {
+    data,
+    error,
+  };
+};
+
+export const impersonateUser = async ({
+  accessToken,
+  userId,
+}: ImpersonateUserParams): Promise<ApiResponse> => {
+  const config: AxiosRequestConfig = {
+    url: `${apiServerUrl}/user/${userId}/impersonate`,
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+
+  const { data, error } = await callExternalApi({ config });
+
+  return {
+    data,
+    error,
+  };
+};
+
+export const stopImpersonation = async ({
+  accessToken,
+}: StopImpersonationParams): Promise<ApiResponse> => {
+  const config: AxiosRequestConfig = {
+    url: `${apiServerUrl}/user/stop-impersonation`,
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
     },
   };
 

@@ -7,7 +7,8 @@ import React, {
   ReactNode,
   useRef,
 } from "react";
-import { getCurrentUser } from "../services/user.service";
+import { getCurrentUser, impersonateUser, stopImpersonation } from "../services/user.service";
+import { CurrentUser, ImpersonatorInfo } from "types/User";
 
 // Login function
 const login = async (email: string, password: string) => {
@@ -56,21 +57,25 @@ const logout = async () => {
   }
 };
 
-interface User {
+interface AuthUser {
   token: string;
+  id: number;
   avatar: string;
   name: string;
   email: string;
   is_admin: boolean;
+  impersonator: ImpersonatorInfo | null;
 }
 
 interface JWTContextType {
-  user: User | null;
+  user: AuthUser | null;
   isAuthenticated: boolean;
   loading: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean, error: string | null }>;
   logout: () => Promise<void>;
   getAccessTokenSilently: () => Promise<string>;
+  impersonate: (userId: number) => Promise<{ success: boolean; error: string | null }>;
+  stopImpersonation: () => Promise<{ success: boolean; error: string | null }>;
 }
 
 const JWTContext = createContext<JWTContextType | undefined>(undefined);
@@ -88,7 +93,7 @@ interface JWTProviderProps {
 }
 
 export const JWTProvider: React.FC<JWTProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
   const refreshLock = useRef<Promise<string> | null>(null);
 
@@ -104,15 +109,28 @@ export const JWTProvider: React.FC<JWTProviderProps> = ({ children }) => {
   }, []);
 
   const internalSetUser = (token: string) => {
-    getCurrentUser({ accessToken: token }).then((response) => {
-      setUser({
-        token,
-        avatar: response.data.avatar,
-        name: response.data.name,
-        email: response.data.email,
-        is_admin: response.data.is_admin,
+    getCurrentUser({ accessToken: token })
+      .then((response) => {
+        if (response.error || !response.data) {
+          setUser(null);
+          return;
+        }
+
+        const currentUser = response.data as CurrentUser;
+
+        setUser({
+          token,
+          id: currentUser.id,
+          avatar: currentUser.avatar,
+          name: currentUser.name,
+          email: currentUser.email,
+          is_admin: currentUser.is_admin,
+          impersonator: currentUser.impersonator ?? null,
+        });
+      })
+      .catch(() => {
+        setUser(null);
       });
-    });
   };
 
   const getAccessTokenSilently = async () => {
@@ -189,6 +207,73 @@ export const JWTProvider: React.FC<JWTProviderProps> = ({ children }) => {
     setUser(null);
   };
 
+  const handleImpersonate = async (userId: number) => {
+    try {
+      const accessToken = await getAccessTokenSilently();
+
+      if (!accessToken) {
+        return { success: false, error: "Token non disponibile" };
+      }
+
+      const response = await impersonateUser({
+        accessToken,
+        userId,
+      });
+
+      if (response.error) {
+        return { success: false, error: response.error.message };
+      }
+
+      const token = (response.data as { token?: string })?.token;
+
+      if (!token) {
+        return { success: false, error: "Token non ricevuto" };
+      }
+
+      localStorage.setItem("token", token);
+      internalSetUser(token);
+
+      return { success: true, error: null };
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error?.message ?? "Impossibile impersonare l'utente",
+      };
+    }
+  };
+
+  const handleStopImpersonation = async () => {
+    try {
+      const accessToken = await getAccessTokenSilently();
+
+      if (!accessToken) {
+        return { success: false, error: "Token non disponibile" };
+      }
+
+      const response = await stopImpersonation({ accessToken });
+
+      if (response.error) {
+        return { success: false, error: response.error.message };
+      }
+
+      const token = (response.data as { token?: string })?.token;
+
+      if (!token) {
+        return { success: false, error: "Token non ricevuto" };
+      }
+
+      localStorage.setItem("token", token);
+      internalSetUser(token);
+
+      return { success: true, error: null };
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error?.message ?? "Impossibile terminare l'impersonificazione",
+      };
+    }
+  };
+
   const handleRefreshTokenSilently = async () => {
     try {
       // Check token validity and refresh if needed
@@ -208,6 +293,8 @@ export const JWTProvider: React.FC<JWTProviderProps> = ({ children }) => {
         login: handleLogin,
         logout: handleLogout,
         getAccessTokenSilently: handleRefreshTokenSilently,
+        impersonate: handleImpersonate,
+        stopImpersonation: handleStopImpersonation,
       }}
     >
       {children}

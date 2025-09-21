@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\GetUserRequest;
-use App\Http\Requests\PostUserRequest;
 use App\Http\Requests\PutUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController
 {
@@ -36,7 +37,81 @@ class UserController
     public function getCurrentUser()
     {
         $user = get_user_by_auth_header();
-        return response()->json($user);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $impersonator = null;
+
+        $impersonatorId = get_impersonator_id();
+
+        if ($impersonatorId) {
+            $impersonator = User::find($impersonatorId);
+        }
+
+        return response()->json([
+            'id' => $user->id,
+            'email' => $user->email,
+            'auth0_id' => $user->auth0_id,
+            'avatar' => $user->avatar,
+            'name' => $user->name,
+            'is_admin' => $user->is_admin,
+            'impersonator' => $impersonator ? $impersonator->only(['id', 'name', 'email']) : null,
+        ]);
+    }
+
+    public function impersonate(Request $request, int $id)
+    {
+        $admin = get_user_by_auth_header();
+
+        if (!$admin || !$admin->is_admin) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        if ($admin->id === $id) {
+            return response()->json(['message' => 'Cannot impersonate yourself'], 422);
+        }
+
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $token = JWTAuth::claims([
+            'impersonator_id' => $admin->id,
+        ])->fromUser($user);
+
+        return response()->json([
+            'token' => $token,
+            'impersonator' => $admin->only(['id', 'name', 'email']),
+        ]);
+    }
+
+    public function stopImpersonation(Request $request)
+    {
+        try {
+            $payload = JWTAuth::parseToken()->getPayload();
+        } catch (JWTException $exception) {
+            return response()->json(['message' => 'Invalid token'], 400);
+        }
+
+        if (!$payload->has('impersonator_id')) {
+            return response()->json(['message' => 'You are not impersonating any user'], 400);
+        }
+
+        $impersonatorId = $payload->get('impersonator_id');
+
+        $impersonator = User::find($impersonatorId);
+
+        if (!$impersonator) {
+            return response()->json(['message' => 'Original user not found'], 404);
+        }
+
+        $token = JWTAuth::fromUser($impersonator);
+
+        return response()->json(['token' => $token]);
     }
 
     public function createUser(Request $request)

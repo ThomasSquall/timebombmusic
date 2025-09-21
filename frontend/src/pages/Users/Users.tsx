@@ -24,6 +24,7 @@ import { User } from "types/User";
 import { createUser, getAllUsers } from "services/user.service";
 import { useAuth } from "contexts/jwt-provider";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 interface Filters {
   query?: string;
@@ -74,7 +75,8 @@ export const Users = (): React.ReactElement => {
     password: "",
   });
 
-  const { getAccessTokenSilently } = useAuth();
+  const { getAccessTokenSilently, impersonate, user: authUser } = useAuth();
+  const navigate = useNavigate();
 
   const queryRef = useRef<HTMLInputElement | null>(null);
   const filteredUsers = applyFilters(users, filters);
@@ -166,6 +168,23 @@ export const Users = (): React.ReactElement => {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
+  const handleImpersonateUser = async (userId: number) => {
+    if (authUser?.id === userId) {
+      toast.error("Sei già autenticato come questo utente.");
+      return;
+    }
+
+    const { success, error } = await impersonate(userId);
+
+    if (!success) {
+      toast.error(error ?? "Impossibile impersonare l'utente selezionato.");
+      return;
+    }
+
+    toast.success("Stai impersonando l'utente selezionato.");
+    navigate("/");
+  };
+
   const handlePageChange = (
     event: MouseEvent<HTMLButtonElement> | null,
     newPage: number
@@ -238,6 +257,7 @@ export const Users = (): React.ReactElement => {
             onRowsPerPageChange={handleRowsPerPageChange}
             rowsPerPage={rowsPerPage}
             page={page}
+            onImpersonate={handleImpersonateUser}
           />
         </Card>
       </Container>
