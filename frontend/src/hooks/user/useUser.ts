@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { CurrentUser } from "types/User";
 import { useAuth } from "contexts/jwt-provider";
 import { getCurrentUser } from "services/user.service";
+import { normalizeCurrentUser } from "utils/normalize-current-user";
 
 type UseUserReturnType = CurrentUser | undefined;
 
@@ -28,9 +29,10 @@ export const useUser = (): UseUserReturnType => {
       const accessToken = await getAccessTokenSilently();
       const _user = await getCurrentUser({ accessToken });
       const currentUser = _user.data as CurrentUser;
+      const normalizedUser = normalizeCurrentUser(currentUser);
 
-      setUser(currentUser);
-      cached_user = currentUser;
+      setUser(normalizedUser);
+      cached_user = normalizedUser;
     })();
   }, [authUserId, getAccessTokenSilently]);
 

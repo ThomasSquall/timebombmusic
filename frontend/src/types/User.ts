@@ -18,4 +18,5 @@ export interface ImpersonatorInfo {
 
 export interface CurrentUser extends User {
   impersonator?: ImpersonatorInfo | null;
+  isImpersonating?: boolean;
 }

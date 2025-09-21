@@ -25,6 +25,8 @@ export const use: { useChat: ReturnType<typeof useChat>, useUser: ReturnType<typ
     name: '',
     id: 0,
     is_admin: false,
-    auth0_id: ''
+    auth0_id: '',
+    impersonator: null,
+    isImpersonating: false,
   }
 };
