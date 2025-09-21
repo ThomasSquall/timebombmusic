@@ -10,15 +10,16 @@ let cached_user: CurrentUser | undefined = undefined;
 export const useUser = (): UseUserReturnType => {
   const [user, setUser] = useState<CurrentUser | undefined>(cached_user);
   const { getAccessTokenSilently, user: authUser } = useAuth();
+  const authUserId = authUser?.id;
 
   useEffect(() => {
-    if (!authUser) {
+    if (!authUserId) {
       cached_user = undefined;
       setUser(undefined);
       return;
     }
 
-    if (cached_user && cached_user.id === authUser.id) {
+    if (cached_user && cached_user.id === authUserId) {
       setUser(cached_user);
       return;
     }
@@ -31,7 +32,7 @@ export const useUser = (): UseUserReturnType => {
       setUser(currentUser);
       cached_user = currentUser;
     })();
-  }, [authUser?.id, getAccessTokenSilently]);
+  }, [authUserId, getAccessTokenSilently]);
 
   return user;
 };
