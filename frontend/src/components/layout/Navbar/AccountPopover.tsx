@@ -11,9 +11,10 @@ import {
 } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
+import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
 import { useAuth } from "contexts/jwt-provider";
 import React from "react";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface AccountPopoverProps {
   anchorEl: null | Element;
@@ -23,7 +24,7 @@ interface AccountPopoverProps {
 
 export const AccountPopover: FC<AccountPopoverProps> = (props) => {
   const { anchorEl, onClose, open, ...other } = props;
-  const { logout } = useAuth();
+  const { logout, stopImpersonation, user } = useAuth();
 
   const navigate = useNavigate();
 
@@ -39,6 +40,23 @@ export const AccountPopover: FC<AccountPopoverProps> = (props) => {
     } catch (err) {
       console.error(err);
       toast.error("Unable to logout.");
+    }
+  };
+
+  const handleStopImpersonation = async (): Promise<void> => {
+    try {
+      onClose?.();
+      const { success, error } = await stopImpersonation();
+
+      if (!success) {
+        toast.error(error ?? "Impossibile tornare all'amministratore.");
+        return;
+      }
+
+      toast.success("Accesso come amministratore ripristinato.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Impossibile tornare all'amministratore.");
     }
   };
 
@@ -121,6 +139,25 @@ export const AccountPopover: FC<AccountPopoverProps> = (props) => {
         </Link>
         <Divider />
         */}
+        {user?.impersonator && (
+          <MenuItem onClick={handleStopImpersonation}>
+            <ListItemIcon>
+              <SwitchAccountIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText
+              primary={
+                <Typography variant="body1" sx={{ color: "white" }}>
+                  Torna a {user.impersonator.name || user.impersonator.email}
+                </Typography>
+              }
+              secondary={
+                <Typography variant="caption" sx={{ color: "rgba(255,255,255,0.7)" }}>
+                  Stai impersonando {user.name || user.email}
+                </Typography>
+              }
+            />
+          </MenuItem>
+        )}
         <MenuItem onClick={handleProfile}>
           <ListItemIcon>
             <PersonIcon fontSize="small" />

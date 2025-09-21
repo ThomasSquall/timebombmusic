@@ -25,6 +25,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::put('user/change-password', [UserController::class, 'changePassword'])->name('changePassword');
     Route::get('user/current', [UserController::class, 'getCurrentUser'])->name('getCurrentUser');
     Route::post('/upload-avatar', [UserController::class, 'uploadAvatar'])->name('uploadAvatar');
+    Route::post('user/stop-impersonation', [UserController::class, 'stopImpersonation'])->name('stopImpersonation');
 
     Route::get('thread/all', [ChatController::class, 'getThreads'])->name('getThreads');
     Route::get('thread/{id}', [ChatController::class, 'getThread'])->name('getThread');
@@ -53,6 +54,7 @@ Route::group(['middleware' => ['auth:api', 'is_admin']], function () {
     Route::get('user/all', [UserController::class, 'getAllUsers'])->name('getAllUsers');
     Route::get('user/{id}', [UserController::class, 'getUser'])->name('getUser');
     Route::put('user/{id}', [UserController::class, 'updateUser'])->name('updateUser');
+    Route::post('user/{id}/impersonate', [UserController::class, 'impersonate'])->name('impersonateUser');
     Route::get('todos/all', [TodoController::class, 'getAllTodos'])->name('getAllTodos');
 });
 

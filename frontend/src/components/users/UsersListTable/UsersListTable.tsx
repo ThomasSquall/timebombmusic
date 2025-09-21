@@ -30,6 +30,7 @@ interface UserListTableProps {
   onRowsPerPageChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   page: number;
   rowsPerPage: number;
+  onImpersonate?: (userId: number) => void;
 }
 
 export const UsersListTable: FC<UserListTableProps> = (props) => {
@@ -40,6 +41,7 @@ export const UsersListTable: FC<UserListTableProps> = (props) => {
     onRowsPerPageChange,
     page,
     rowsPerPage,
+    onImpersonate,
     ...other
   } = props;
 
@@ -146,11 +148,29 @@ export const UsersListTable: FC<UserListTableProps> = (props) => {
                     </Box>
                   </TableCell>
                   <TableCell align="right">
-                    <Link to={"/users/" + user.id + "/edit"}>
-                      <IconButton component="h2">
-                        <PencilAltIcon fontSize="small" />
-                      </IconButton>
-                    </Link>
+                    <Box
+                      sx={{
+                        alignItems: "center",
+                        display: "flex",
+                        gap: 1,
+                        justifyContent: "flex-end",
+                      }}
+                    >
+                      {onImpersonate && (
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={() => onImpersonate(user.id)}
+                        >
+                          Impersona
+                        </Button>
+                      )}
+                      <Link to={"/users/" + user.id + "/edit"}>
+                        <IconButton component="h2">
+                          <PencilAltIcon fontSize="small" />
+                        </IconButton>
+                      </Link>
+                    </Box>
                   </TableCell>
                 </TableRow>
               );

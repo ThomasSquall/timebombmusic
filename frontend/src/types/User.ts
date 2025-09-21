@@ -9,3 +9,13 @@ export interface User {
   is_admin: boolean;
   todos?: Todo[];
 }
+
+export interface ImpersonatorInfo {
+  id: number;
+  name: string;
+  email: string;
+}
+
+export interface CurrentUser extends User {
+  impersonator?: ImpersonatorInfo | null;
+}
