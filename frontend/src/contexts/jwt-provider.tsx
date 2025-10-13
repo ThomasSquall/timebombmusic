@@ -138,6 +138,11 @@ export const JWTProvider: React.FC<JWTProviderProps> = ({ children }) => {
       });
   };
 
+  const clearSession = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+  };
+
   const getAccessTokenSilently = async () => {
     if (refreshLock.current) {
       // If a token refresh operation is in progress, wait for it to complete
@@ -175,6 +180,10 @@ export const JWTProvider: React.FC<JWTProviderProps> = ({ children }) => {
           .then((refreshResponse) => {
             const refreshedToken = refreshResponse.data.token;
 
+            if (!refreshedToken) {
+              throw new Error("Token non ricevuto durante il refresh");
+            }
+
             // Update the token in localStorage
             localStorage.setItem("token", refreshedToken);
             internalSetUser(refreshedToken);
@@ -189,7 +198,11 @@ export const JWTProvider: React.FC<JWTProviderProps> = ({ children }) => {
       }
     } catch (error: any) {
       console.error("Token refresh failed:", error.message);
-      throw error;
+
+      refreshLock.current = null;
+      clearSession();
+
+      return "";
     }
   };
 
