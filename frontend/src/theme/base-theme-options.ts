@@ -117,6 +117,14 @@ export const baseThemeOptions: ThemeOptions = {
           minHeight: '100%',
           width: '100%'
         },
+        input: {
+          '&:-webkit-autofill,&:-webkit-autofill:hover,&:-webkit-autofill:focus,&:-webkit-autofill:active': {
+            transition: 'background-color 9999s ease-in-out 0s',
+            WebkitBoxShadow: '0 0 0px 1000px #FFFFFF inset',
+            boxShadow: '0 0 0px 1000px #FFFFFF inset',
+            WebkitTextFillColor: 'inherit'
+          }
+        },
         '#__next': {
           display: 'flex',
           flex: '1 1 auto',
